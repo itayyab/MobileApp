@@ -39,7 +39,7 @@ class AppSettings(// Context
     }
 
     fun getLoggedIn(): Boolean {
-        return pref.getBoolean(KEY_LOGGEDIN, true)
+        return pref.getBoolean(KEY_LOGGEDIN, false)
     }
 
     fun saveIsAdmin(first: Boolean) {

@@ -1,4 +1,4 @@
-package com.tayyab.mobileapp.ui.slideshow
+package com.tayyab.mobileapp.ui.cart
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,13 +8,12 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.tayyab.mobileapp.R
-import com.tayyab.mobileapp.databinding.FragmentSlideshowBinding
+import com.tayyab.mobileapp.databinding.FragmentCartBinding
 
-class SlideshowFragment : Fragment() {
+class CartFragment : Fragment() {
 
-    private lateinit var slideshowViewModel: SlideshowViewModel
-    private var _binding: FragmentSlideshowBinding? = null
+    private lateinit var cartViewModel: CartViewModel
+    private var _binding: FragmentCartBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -25,14 +24,14 @@ class SlideshowFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        slideshowViewModel =
-            ViewModelProvider(this).get(SlideshowViewModel::class.java)
+        cartViewModel =
+            ViewModelProvider(this).get(CartViewModel::class.java)
 
-        _binding = FragmentSlideshowBinding.inflate(inflater, container, false)
+        _binding = FragmentCartBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textSlideshow
-        slideshowViewModel.text.observe(viewLifecycleOwner, Observer {
+        val textView: TextView = binding.textGallery
+        cartViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root

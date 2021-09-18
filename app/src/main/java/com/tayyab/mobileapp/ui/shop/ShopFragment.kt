@@ -1,4 +1,4 @@
-package com.tayyab.mobileapp.ui.home
+package com.tayyab.mobileapp.ui.shop
 
 import android.os.Bundle
 import android.text.Editable
@@ -37,9 +37,9 @@ import org.json.JSONObject
 import com.tayyab.mobileapp.interfaces.OnSpeakClickListener
 
 
-class HomeFragment : Fragment() {
+class ShopFragment : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var shopViewModel: ShopViewModel
     private var _binding: FragmentHomeBinding? = null
     private var bindingx: AutoClearedValue<FragmentHomeBinding>? = null
     private var adapter: AutoClearedValue<ProductsAdapter>? = null
@@ -58,12 +58,12 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+        shopViewModel =
+            ViewModelProvider(this).get(ShopViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        bindingx = AutoClearedValue(this@HomeFragment, _binding!!)
+        bindingx = AutoClearedValue(this@ShopFragment, _binding!!)
         val root: View = binding.root
         appSettings= AppSettings(requireContext())
 
@@ -77,7 +77,7 @@ class HomeFragment : Fragment() {
 //            //Log.e("RESP:",it)
 //        })
 
-        homeViewModel.getProductsStart().observe(viewLifecycleOwner,
+        shopViewModel.getProductsStart().observe(viewLifecycleOwner,
             Observer<List<Product>> { t ->
                 bindingx!!.get().progressBar.visibility = View.VISIBLE
                 adapter!!.get().insertData(t!!)
@@ -209,7 +209,7 @@ class HomeFragment : Fragment() {
         //Toast.makeText(context,"RESUME",Toast.LENGTH_SHORT).show()
 
         bindingx!!.get().progressBar.visibility = View.VISIBLE
-        homeViewModel!!.getProducts()
+        shopViewModel!!.getProducts()
     }
 
 

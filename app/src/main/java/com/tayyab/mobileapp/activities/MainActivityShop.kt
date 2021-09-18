@@ -4,10 +4,7 @@ import android.os.Bundle
 import android.util.Base64
 import android.util.Log
 import android.view.Menu
-import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -28,8 +25,6 @@ import com.tayyab.mobileapp.utils.AppSettings
 import com.tayyab.mobileapp.utils.VolleySingleton
 import com.tayyab.mobileapp.Config
 import com.tayyab.mobileapp.R
-import com.tayyab.mobileapp.models.Product
-import com.tayyab.mobileapp.ui.home.HomeViewModel
 
 
 class MainActivityShop : AppCompatActivity() {

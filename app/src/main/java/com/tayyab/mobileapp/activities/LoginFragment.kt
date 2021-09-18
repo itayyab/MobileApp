@@ -79,13 +79,12 @@ class LoginFragment : Fragment() {
             jsonObjectx,
             Response.Listener { response ->
 
-                var token=  response.get("token").toString()
-                var extract= token.split(".")[1]
+                val token=  response.get("token").toString()
+                val extract= token.split(".")[1]
                 val decodedBytes = Base64.decode(extract,Base64.DEFAULT);
                 val decodedString = String(decodedBytes)
                 val javaRootMapObject: Map<*, *> = Gson().fromJson(
-                    decodedString,
-                    Map::class.java
+                    decodedString,                    Map::class.java
                 )
                 Toast.makeText(context,decodedString.toString(),Toast.LENGTH_LONG).show()
                 appSettings?.saveLoggedIn(true)
