@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.tayyab.mobileapp.Config
+import com.tayyab.mobileapp.databinding.ProductCrudListItemBinding
 import com.tayyab.mobileapp.databinding.ProductListItemBinding
 import com.tayyab.mobileapp.interfaces.OnProductItemClickListener
 import com.tayyab.mobileapp.interfaces.OnSpeakClickListener
@@ -17,7 +18,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class ProductsAdapter(rowLayout: Int, recyclerView: RecyclerView) :
+class ProductsCrudAdapter(rowLayout: Int, recyclerView: RecyclerView) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     Filterable {
 
@@ -65,7 +66,7 @@ class ProductsAdapter(rowLayout: Int, recyclerView: RecyclerView) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val wordListItemBinding: ProductListItemBinding =
+        val wordListItemBinding: ProductCrudListItemBinding =
             DataBindingUtil.inflate(LayoutInflater.from(parent.context), rowLayout, parent, false)
         return RecyclerViewHolder(wordListItemBinding)
     }
@@ -81,11 +82,11 @@ class ProductsAdapter(rowLayout: Int, recyclerView: RecyclerView) :
         }
     }
 
-    class RecyclerViewHolder(wordListItemBinding: ProductListItemBinding) :
+    class RecyclerViewHolder(wordListItemBinding: ProductCrudListItemBinding) :
         RecyclerView.ViewHolder(wordListItemBinding.root) {
         var image_list: ImageView? = wordListItemBinding.imageView
 
-        val itemBinding: ProductListItemBinding = wordListItemBinding
+        val itemBinding: ProductCrudListItemBinding = wordListItemBinding
 
     }
 

@@ -1,5 +1,6 @@
 package com.tayyab.mobileapp.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
@@ -8,25 +9,24 @@ import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import com.tayyab.mobileapp.Config
-import com.tayyab.mobileapp.databinding.ProductListItemBinding
+import com.tayyab.mobileapp.databinding.CategoriesListItemBinding
+import com.tayyab.mobileapp.interfaces.OnCategoryItemClickListener
 import com.tayyab.mobileapp.interfaces.OnProductItemClickListener
 import com.tayyab.mobileapp.interfaces.OnSpeakClickListener
-import com.tayyab.mobileapp.models.Product
+import com.tayyab.mobileapp.models.Category
 import java.util.*
 import kotlin.collections.ArrayList
 
 
-class ProductsAdapter(rowLayout: Int, recyclerView: RecyclerView) :
+class CategoriesAdapter(rowLayout: Int, recyclerView: RecyclerView) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(),
     Filterable {
 
     private var recyclerView: RecyclerView? = null
    // private var shift: Boolean = false
-    private var data: ArrayList<Product>? = null
-    private var original: ArrayList<Product>? = null
-    private var mOnProductItemClickListener: OnProductItemClickListener? = null
-    private var onSpeakClickListener: OnSpeakClickListener? = null
+    private var data: ArrayList<Category>? = null
+    private var original: ArrayList<Category>? = null
+    private var mOnCategoryItemClickListener: OnCategoryItemClickListener? = null
 
     private val rowLayout: Int
 
@@ -41,14 +41,11 @@ class ProductsAdapter(rowLayout: Int, recyclerView: RecyclerView) :
         this.original = ArrayList()
     }
 
-    fun setOnItemClickListener(mProductItemClickListener: OnProductItemClickListener) {
-        this.mOnProductItemClickListener = mProductItemClickListener
-    }
-    fun setOnSpeakClickListener(mItemClickListener: OnSpeakClickListener) {
-        this.onSpeakClickListener = mItemClickListener
+    fun setOnItemClickListener(mCategoryItemClickListener: OnCategoryItemClickListener) {
+        this.mOnCategoryItemClickListener = mCategoryItemClickListener
     }
 
-    fun insertData(items: List<Product>) {
+    fun insertData(items: List<Category>) {
         if (items.size > data!!.size) {
             data!!.clear()
             // original!!.clear()
@@ -65,7 +62,7 @@ class ProductsAdapter(rowLayout: Int, recyclerView: RecyclerView) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val wordListItemBinding: ProductListItemBinding =
+        val wordListItemBinding: CategoriesListItemBinding =
             DataBindingUtil.inflate(LayoutInflater.from(parent.context), rowLayout, parent, false)
         return RecyclerViewHolder(wordListItemBinding)
     }
@@ -73,19 +70,18 @@ class ProductsAdapter(rowLayout: Int, recyclerView: RecyclerView) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is RecyclerViewHolder) {
            // holder.itemBinding.shift = shift
-            val word: Product = data!![position]
-            holder.itemBinding.product = word
-            holder.itemBinding.clicklistner = mOnProductItemClickListener
-            holder.itemBinding.speakclicklistner = onSpeakClickListener
-            holder?.image_list?.loadUrl(Config.IMAGE_BASE_URL + data!![position].pr_Picture)
+            val word: Category = data!![position]
+            holder.itemBinding.category = word
+            holder.itemBinding.clicklistner = mOnCategoryItemClickListener
+//            holder?.image_list?.loadUrl(Config.IMAGE_BASE_URL + data!![position].pr_Picture)
         }
     }
 
-    class RecyclerViewHolder(wordListItemBinding: ProductListItemBinding) :
+    class RecyclerViewHolder(wordListItemBinding: CategoriesListItemBinding) :
         RecyclerView.ViewHolder(wordListItemBinding.root) {
-        var image_list: ImageView? = wordListItemBinding.imageView
+//        var image_list: ImageView? = wordListItemBinding.imageView
 
-        val itemBinding: ProductListItemBinding = wordListItemBinding
+        val itemBinding: CategoriesListItemBinding = wordListItemBinding
 
     }
 
@@ -103,7 +99,7 @@ class ProductsAdapter(rowLayout: Int, recyclerView: RecyclerView) :
                     data = original
                 } else {
                     //    searchText = charString
-                    val filteredList = ArrayList<Product>()
+                    val filteredList = ArrayList<Category>()
 //                    for (item in original!!) {
 //                        if (item.synonym.isNullOrEmpty()) {
 //                            if (item.Word!!.contains(charString) || item.Meaning!!.contains(

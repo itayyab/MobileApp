@@ -18,6 +18,7 @@ import com.tayyab.mobileapp.databinding.FragmentLoginBinding
 import com.tayyab.mobileapp.utils.VolleySingleton
 import org.json.JSONObject
 import com.google.gson.Gson
+import com.tayyab.mobileapp.admin.MainActivityAdmin
 import com.tayyab.mobileapp.utils.AppSettings
 import kotlin.collections.HashMap
 
@@ -53,7 +54,7 @@ class LoginFragment : Fragment() {
         }
         appSettings= AppSettings(requireContext())
         if(appSettings!!.getLoggedIn()){
-            val intent = Intent(this@LoginFragment.context, MainActivityShop::class.java)
+            val intent = Intent(this@LoginFragment.context, MainActivityAdmin::class.java)
             //intent.putExtra("WID", obj.WID)
             startActivity(intent)
             activity?.finish()
@@ -90,7 +91,7 @@ class LoginFragment : Fragment() {
                 appSettings?.saveLoggedIn(true)
                 appSettings?.saveToken(token)
                 appSettings?.saveIsAdmin(javaRootMapObject.get("role")!!.equals("ADMIN"))
-                val intent = Intent(this@LoginFragment.context, MainActivityShop::class.java)
+                val intent = Intent(this@LoginFragment.context, MainActivityAdmin::class.java)
                 //intent.putExtra("WID", obj.WID)
                 startActivity(intent)
             },

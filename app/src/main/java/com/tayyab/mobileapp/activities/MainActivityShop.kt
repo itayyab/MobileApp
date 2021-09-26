@@ -57,7 +57,7 @@ class MainActivityShop : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+                R.id.nav_categories, R.id.nav_products, R.id.nav_slideshow
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -69,7 +69,7 @@ class MainActivityShop : AppCompatActivity() {
 
         viewModel!!.getProductsStart().observe(this,
             Observer<Int> { t ->
-                var badge = bottomNavigationView.getOrCreateBadge(R.id.nav_gallery)
+                var badge = bottomNavigationView.getOrCreateBadge(R.id.nav_products)
                 badge.isVisible = true
 // An icon only badge will be displayed unless a number is set:
                 badge.number = t
@@ -148,7 +148,7 @@ class MainActivityShop : AppCompatActivity() {
 //                    decodedString,
 //                    Map::class.java
 //                )
-                var badge = bottomNavigationView.getOrCreateBadge(R.id.nav_gallery)
+                var badge = bottomNavigationView.getOrCreateBadge(R.id.nav_products)
                 badge.isVisible = true
 // An icon only badge will be displayed unless a number is set:
                 badge.number = response.toInt()

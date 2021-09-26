@@ -1,21 +1,21 @@
-package com.tayyab.mobileapp.ui.shop
+package com.tayyab.mobileapp.admin
 
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Base64
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.*
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.*
+import com.android.volley.Request
+import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.textfield.TextInputLayout
@@ -23,61 +23,52 @@ import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import com.tayyab.mobileapp.Config
 import com.tayyab.mobileapp.R
-import com.tayyab.mobileapp.activities.MainActivityShopViewModel
-import com.tayyab.mobileapp.models.Product
 import com.tayyab.mobileapp.adapters.ProductsAdapter
+import com.tayyab.mobileapp.adapters.ProductsCrudAdapter
+import com.tayyab.mobileapp.databinding.FragmentProductsBinding
 import com.tayyab.mobileapp.databinding.FragmentShopBinding
-import com.tayyab.mobileapp.databinding.FragmentShopBindingImpl
 import com.tayyab.mobileapp.interfaces.OnProductItemClickListener
+import com.tayyab.mobileapp.interfaces.OnSpeakClickListener
 import com.tayyab.mobileapp.models.CartDetail
 import com.tayyab.mobileapp.models.Carts
+import com.tayyab.mobileapp.models.Product
+import com.tayyab.mobileapp.ui.shop.ShopViewModel
 import com.tayyab.mobileapp.utils.AppSettings
 import com.tayyab.mobileapp.utils.AutoClearedValue
 import com.tayyab.mobileapp.utils.VolleySingleton
 import org.json.JSONObject
-import com.tayyab.mobileapp.interfaces.OnSpeakClickListener
 
+/**
+ * A simple [Fragment] subclass as the second destination in the navigation.
+ */
+class ProductsFragment : Fragment() {
 
-class ShopFragment : Fragment() {
-
+    private var _binding: FragmentProductsBinding? = null
     private lateinit var shopViewModel: ShopViewModel
-    private var _binding: FragmentShopBinding? = null
-    private var bindingx: AutoClearedValue<FragmentShopBinding>? = null
-    private var adapter: AutoClearedValue<ProductsAdapter>? = null
-    private var wordsadapter: ProductsAdapter? = null
+    private var bindingx: AutoClearedValue<FragmentProductsBinding>? = null
+    private var adapter: AutoClearedValue<ProductsCrudAdapter>? = null
+    private var wordsadapter: ProductsCrudAdapter? = null
     lateinit var editText: EditText
     lateinit var startString: String
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
     var appSettings: AppSettings?=null
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private val activityViewModel: MainActivityShopViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         shopViewModel =
             ViewModelProvider(this).get(ShopViewModel::class.java)
-
-        _binding = FragmentShopBinding.inflate(inflater, container, false)
-
-        bindingx = AutoClearedValue(this@ShopFragment, _binding!!)
+        _binding = FragmentProductsBinding.inflate(inflater, container, false)
+        bindingx = AutoClearedValue(this@ProductsFragment, _binding!!)
         val root: View = binding.root
         appSettings= AppSettings(requireContext())
-
         bottomSheetBehavior = BottomSheetBehavior.from<FrameLayout>(binding.standardBottomSheet)
-//        val textView: TextView = binding.textHome
-//        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-        //   textView.text = it
-//        })
-//
-//        homeViewModel!!.text2.observe(viewLifecycleOwner, Observer {
-//            //Log.e("RESP:",it)
-//        })
-
         shopViewModel.getProductsStart().observe(viewLifecycleOwner,
             Observer<List<Product>> { t ->
                 bindingx!!.get().progressBar.visibility = View.VISIBLE
@@ -90,18 +81,17 @@ class ShopFragment : Fragment() {
         val recyclerWords: RecyclerView = bindingx!!.get().words
         val mLayoutManagerwords = LinearLayoutManager(context)
         recyclerWords.layoutManager = mLayoutManagerwords
-        wordsadapter = ProductsAdapter(R.layout.product_list_item, recyclerWords)
+        wordsadapter = ProductsCrudAdapter(R.layout.product_crud_list_item, recyclerWords)
         adapter = AutoClearedValue(this, wordsadapter!!)
         recyclerWords.adapter = adapter!!.get()
         adapter!!.get().setOnItemClickListener(object : OnProductItemClickListener {
             override fun onItemClick(obj: Product) {
-
                 if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED||bottomSheetBehavior.state != BottomSheetBehavior.STATE_HALF_EXPANDED) {
                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_HALF_EXPANDED
-                  //  persistentBtn.text = "Close Bottom Sheet"
+                    //  persistentBtn.text = "Close Bottom Sheet"
                 } else {
                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                   // persistentBtn.text = "Show Bottom Sheet"
+                    // persistentBtn.text = "Show Bottom Sheet"
                 }
                 binding.imageView?.loadUrl(Config.IMAGE_BASE_URL + obj.pr_Picture)
                 binding.product = obj
@@ -110,7 +100,15 @@ class ShopFragment : Fragment() {
                         sendRequest(obj)
                     }
                 }
-                binding.speakclicklistner = obj
+
+               // binding.imageView?.loadUrl(Config.IMAGE_BASE_URL + obj.pr_Picture)
+//                binding.product = obj
+//                val obj = object : OnSpeakClickListener {
+//                    override fun onSpeakClick(obj: Product, shift: Boolean) {
+//                        sendRequest(obj)
+//                    }
+//                }
+//                binding.speakclicklistner = obj
 //                val intent = Intent(this@DicRecyclerFragment.context, ActivityDetails::class.java)
 //                intent.putExtra("WID", obj.WID)
 //                intent.putExtra("Word", obj.Word)
@@ -123,13 +121,6 @@ class ShopFragment : Fragment() {
 //                startActivity(intent)
             }
         })
-        adapter!!.get().setOnSpeakClickListener(object : OnSpeakClickListener{
-            override fun onSpeakClick(obj: Product, shift: Boolean) {
-                sendRequest(obj)
-
-            }
-        })
-
         val textInputCustomEndIcon: TextInputLayout = bindingx!!.get().textinputlayout
 
         editText = _binding!!.edittext
@@ -180,13 +171,28 @@ class ShopFragment : Fragment() {
             }
             false
         })
+        return binding.root
 
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
+//        binding.buttonSecond.setOnClickListener {
+//            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+//        }
+    }
 
-        //sendRequest()
-        return root
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+    override fun onResume() {
+        super.onResume()
+        //Toast.makeText(context,"RESUME",Toast.LENGTH_SHORT).show()
 
+        bindingx!!.get().progressBar.visibility = View.VISIBLE
+        shopViewModel!!.getProducts()
     }
     fun getUser():String{
         var extract= appSettings?.getToken()?.split(".")?.get(1)
@@ -200,23 +206,9 @@ class ShopFragment : Fragment() {
         )
         return javaRootMapObject.get("UserID").toString()
     }
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    override fun onResume() {
-        super.onResume()
-        //Toast.makeText(context,"RESUME",Toast.LENGTH_SHORT).show()
-
-        bindingx!!.get().progressBar.visibility = View.VISIBLE
-        shopViewModel!!.getProducts()
-    }
-
-
     fun sendRequest(product:Product) {
 
-       // var userid=appSettings.g
+        // var userid=appSettings.g
 //        var carx: CartDetails[] = [{ cD_Pr_id: productid, cD_id:0, cartForeignKey: 0, cD_Pr_Amnt: 0, cD_Pr_price: 0, cD_Pr_Qty: 0, cart: null, product: null, productForeignKey:0 }];
 //        var cart = {
 //            cart_id: 0, status: "PENDING", totalAmount: 0, totalQty: 0, userID: heroes, cartDetails: carx
@@ -241,7 +233,7 @@ class ShopFragment : Fragment() {
 //        val paramsx = HashMap<String,String>()
 //        paramsx["username"] = "tayyab"
 //        paramsx["password"] = "123456"
-      //  val jsonObjectx = JSONObject(paramsx as Map<*, *>)
+        //  val jsonObjectx = JSONObject(paramsx as Map<*, *>)
         val jsonArrayRequest = object : JsonObjectRequest(
             Request.Method.POST,
             Config.BASE_URL+"Carts",
@@ -257,7 +249,7 @@ class ShopFragment : Fragment() {
 //                    Map::class.java
 //                )
                 Toast.makeText(context,response.toString(), Toast.LENGTH_LONG).show()
-                activityViewModel.getProducts(getUser())
+           //     activityViewModel.getProducts(getUser())
 //                appSettings?.saveLoggedIn(true)
 //                appSettings?.saveToken(token)
 //                appSettings?.saveIsAdmin(javaRootMapObject.get("UserID")!!.equals("ADMIN"))
@@ -265,7 +257,7 @@ class ShopFragment : Fragment() {
 //                //intent.putExtra("WID", obj.WID)
 //                startActivity(intent)
             },
-            Response.ErrorListener {  error ->// Do something when error occurred
+            Response.ErrorListener { error ->// Do something when error occurred
                 Toast.makeText(context,error.message.toString(), Toast.LENGTH_LONG).show()
             }
         ) {

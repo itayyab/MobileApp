@@ -2,6 +2,6 @@ package com.tayyab.mobileapp.interfaces
 
 import com.tayyab.mobileapp.models.Product
 
-interface OnItemClickListener {
+interface OnProductItemClickListener {
     fun onItemClick( obj: Product)
 }

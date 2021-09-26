@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="category"
+            type="com.tayyab.mobileapp.models.Category"/>
+        <variable
+            name="clicklistner"
+            type="com.tayyab.mobileapp.interfaces.OnCategoryItemClickListener"/>
+
+    </data>
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        app:cardCornerRadius="5dp"
+        style="@style/Widget.MaterialComponents.CardView"
+        android:onClick="@{() -> clicklistner.onItemClick(category)}"
+        app:cardElevation="2dp">
+
+        <RelativeLayout
+            android:id="@+id/re"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingBottom="0dp"
+            android:paddingLeft="0dp"
+            android:paddingTop="0dp">
+            <TextView
+                android:layout_centerVertical="true"
+                android:id="@+id/list_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:gravity="fill"
+                android:padding="15dp"
+                android:text="@{String.valueOf(category.cat_id)}"
+                android:textColor="?colorPrimaryDark"
+                android:textSize="18sp" />
+                <TextView
+                    android:layout_toEndOf="@id/list_id"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/list_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
+                    android:gravity="fill"
+                    android:layout_marginStart="15dp"
+                    android:padding="15dp"
+                    android:text="@{category.cat_name}"
+                    android:textColor="?colorPrimaryDark"
+                    android:textSize="18sp" />
+
+
+        </RelativeLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

@@ -41,8 +41,9 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_width="50dp"
+            android:layout_centerVertical="true"
+            android:layout_height="50dp"
             android:adjustViewBounds="true"
             android:background="?android:attr/selectableItemBackground"
             android:scaleType="centerCrop"
@@ -55,56 +56,26 @@ android:layout_below="@id/imageView"            android:background="?android:att
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/imageView"
+            android:layout_toEndOf="@id/imageView"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
             android:padding="5dp"
             android:orientation="vertical">
+
             <TextView
-                android:layout_weight="1"
-                android:layout_toStartOf="@id/btnAddCart"
+                android:layout_centerVertical="true"
                 android:id="@+id/list_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
+                android:layout_weight="1"
                 android:gravity="fill"
                 android:padding="5dp"
                 android:text="@{product.pr_name}"
                 android:textColor="?colorPrimaryDark"
                 android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/list_titlex"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/list_title"
-                android:layout_toStartOf="@id/btnAddCart"
-                android:gravity="fill"
-                android:padding="5dp"
-                android:text="@{product.pr_desc}"
-                android:textColor="?colorPrimaryDark"
-                android:textSize="18sp"
-                android:visibility="visible" />
-            <Button
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:id="@+id/btnAddCart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="@{() -> Speakclicklistner.onSpeakClick(product,false)}"
-                android:text="Add to Cart"
-                />
         </RelativeLayout>
-        <ToggleButton
-            android:layout_below="@id/imageView"
-            android:id="@+id/toggleButton"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentEnd="true"
-            android:drawableTop="@drawable/ic_close"
-            android:visibility="gone"
-            android:text=""
-            android:textOff=""
-            android:textOn="" />
+
         <LinearLayout
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"

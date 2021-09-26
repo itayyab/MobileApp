@@ -26,4 +26,6 @@
     <string name="title_activity_auth">AuthActivity</string>
     <string name="title_activity_main_admin">MainActivityAdmin</string>
     <string name="title_activity_main_test">MainActivityTest</string>
+    <string name="categories">Categories</string>
+    <string name="products">Products</string>
 </resources>

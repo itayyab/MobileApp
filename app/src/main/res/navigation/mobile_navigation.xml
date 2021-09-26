@@ -3,23 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/nav_categories">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.tayyab.mobileapp.ui.shop.ShopFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/nav_categories"
+        android:name="com.tayyab.mobileapp.admin.CategoriesFragment"
+        android:label="@string/categories"
+        tools:layout="@layout/fragment_categories" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.tayyab.mobileapp.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/nav_products"
+        android:name="com.tayyab.mobileapp.admin.ProductsFragment"
+        android:label="@string/products"
+        tools:layout="@layout/fragment_products" />
 
-    <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.tayyab.mobileapp.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
 </navigation>

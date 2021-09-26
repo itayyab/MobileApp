@@ -14,7 +14,7 @@
             type="Boolean"/>
         <variable
             name="clicklistner"
-            type="com.tayyab.mobileapp.interfaces.OnItemClickListener"/>
+            type="com.tayyab.mobileapp.interfaces.OnProductItemClickListener"/>
         <variable
             name="Speakclicklistner"
             type="com.tayyab.mobileapp.interfaces.OnSpeakClickListener"/>
