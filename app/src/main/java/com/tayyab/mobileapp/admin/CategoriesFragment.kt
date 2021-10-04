@@ -3,6 +3,7 @@ package com.tayyab.mobileapp.admin
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,13 +54,25 @@ class CategoriesFragment : Fragment() {
         bindingx = AutoClearedValue(this@CategoriesFragment, _binding!!)
 
 
+
+        return binding.root
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         categoriesViewModel.getProductsStart().observe(viewLifecycleOwner,
             Observer<List<Category>> { t ->
+                Log.e("DBG:", "getProducts observed")
                 bindingx!!.get().progressBar.visibility = View.VISIBLE
                 adapter!!.get().insertData(t!!)
                 bindingx!!.get().progressBar.visibility = View.GONE
             })
-
+        activityViewModel.dataupdated?.observe(viewLifecycleOwner, Observer { list ->
+            // Update the list UI
+            Log.e("DBG:", "dataupdated observed")
+            categoriesViewModel.getProducts()
+        })
 
         val recyclerWords: RecyclerView = bindingx!!.get().words
         val mLayoutManagerwords = LinearLayoutManager(context)
@@ -71,7 +84,7 @@ class CategoriesFragment : Fragment() {
         val textInputCustomEndIcon: TextInputLayout = bindingx!!.get().textinputlayout
         adapter!!.get().setOnItemClickListener(object : OnCategoryItemClickListener {
             override fun onItemClick(obj: Category) {
-                activityViewModel.getDialogs(false)
+                activityViewModel.getDialogs(false,obj)
             }
         })
 
@@ -89,12 +102,6 @@ class CategoriesFragment : Fragment() {
 
         editText.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable) {
-                // val txt: String = editText.getText().toString()
-                // or String txt = s.toString();
-                // or String txt = s.toString();
-                // if (!txt.isEmpty()) {
-
-                //}
 
             }
 
@@ -123,13 +130,6 @@ class CategoriesFragment : Fragment() {
             }
             false
         })
-        return binding.root
-
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
 //        binding.buttonFirst.setOnClickListener {
 //            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
 //        }
@@ -140,7 +140,7 @@ class CategoriesFragment : Fragment() {
         //Toast.makeText(context,"RESUME",Toast.LENGTH_SHORT).show()
 
         bindingx!!.get().progressBar.visibility = View.VISIBLE
-        categoriesViewModel!!.getProducts()
+        categoriesViewModel.getProducts()
     }
 
     override fun onDestroyView() {

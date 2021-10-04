@@ -2,6 +2,7 @@ package com.tayyab.mobileapp.admin
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -21,7 +22,7 @@ class CategoriesViewModel (application: Application) : AndroidViewModel(applicat
 
     fun getProductsStart() = data!!
     fun getProducts() {
-
+        Log.e("DBG:", "getProducts called")
         // volleyRequestQueue = Volley.newRequestQueue(application.applicationContext)
         var jsonreq= ApiUtils.GsonRequestForCat<ArrayList<Category>>(
             Config.BASE_URL + "Categories",

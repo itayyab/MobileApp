@@ -8,13 +8,13 @@ import android.widget.Filterable
 import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import com.tayyab.mobileapp.databinding.CategoriesListItemBinding
 import com.tayyab.mobileapp.interfaces.OnCategoryItemClickListener
-import com.tayyab.mobileapp.interfaces.OnProductItemClickListener
-import com.tayyab.mobileapp.interfaces.OnSpeakClickListener
 import com.tayyab.mobileapp.models.Category
 import java.util.*
+import java.util.stream.Collectors
 import kotlin.collections.ArrayList
 
 
@@ -46,9 +46,17 @@ class CategoriesAdapter(rowLayout: Int, recyclerView: RecyclerView) :
     }
 
     fun insertData(items: List<Category>) {
+        //val found: Boolean = data?.stream().anyMatch { p -> p.name.equals(personName) }
+        val common: List<Category> = items
+            .stream()
+            .filter(data!!::contains)
+            .collect(Collectors.toList())
+        val gson = Gson()
+        val arrayData = gson.toJson(common)
+        Log.e("TEST:",arrayData)
         if (items.size > data!!.size) {
             data!!.clear()
-            // original!!.clear()
+            original!!.clear()
             // int positionStart = getItemCount();
             // int itemCount = items.size();
             this.data!!.addAll(items)
@@ -56,7 +64,18 @@ class CategoriesAdapter(rowLayout: Int, recyclerView: RecyclerView) :
             recyclerView!!.post { notifyItemRangeChanged(int, data!!.size) }
             this.original!!.addAll(items)
             // this.original!!.addAll(items)
-
+            int = data!!.size
+        }else if(data!!.size!=common.size){
+            Log.e("TEST:", "else block")
+            data!!.clear()
+            original!!.clear()
+            // int positionStart = getItemCount();
+            // int itemCount = items.size();
+            this.data!!.addAll(items)
+            //notifyDataSetChanged()
+            recyclerView!!.post { notifyItemRangeChanged(common.size, data!!.size) }
+            this.original!!.addAll(items)
+            // this.original!!.addAll(items)
             int = data!!.size
         }
     }
@@ -92,7 +111,7 @@ class CategoriesAdapter(rowLayout: Int, recyclerView: RecyclerView) :
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(charSequence: CharSequence): FilterResults {
-                val charString = charSequence.toString().toLowerCase(Locale.getDefault())
+                val charString = charSequence.toString().lowercase(Locale.getDefault())
                // Log.e("SSS", charString);
                 if (charString.isEmpty()) {
                     //  searchText = ""

@@ -10,6 +10,8 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.tayyab.mobileapp.Config
 import com.tayyab.mobileapp.R
+import com.tayyab.mobileapp.models.Category
+import com.tayyab.mobileapp.models.DialogModel
 import com.tayyab.mobileapp.models.Product
 import com.tayyab.mobileapp.utils.ApiUtils
 import com.tayyab.mobileapp.utils.VolleySingleton
@@ -17,12 +19,21 @@ import com.tayyab.mobileapp.utils.VolleySingleton
 class MainActivityAdminViewModel (application: Application) : AndroidViewModel(application) {
     var data: MutableLiveData<Int>? = MutableLiveData()
     val queue = VolleySingleton.getInstance(application.applicationContext)
-    var dailog: MutableLiveData<Boolean>? = MutableLiveData()
+    var dailog: MutableLiveData<DialogModel>? = MutableLiveData()
 
     fun getDialogStart() = dailog!!
 
-    fun getDialogs(product: Boolean) {
-        dailog!!.value =product
+    fun getDialogs(product: Boolean,data:Any) {
+        val dia =
+            DialogModel(product,data)
+        dailog!!.value =dia
+    }
+
+
+    var dataupdated: MutableLiveData<Boolean>? = MutableLiveData()
+
+    fun getDataUpdated() {
+        dataupdated!!.value = true
     }
 
 

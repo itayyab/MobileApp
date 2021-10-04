@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.*
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +24,7 @@ import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import com.tayyab.mobileapp.Config
 import com.tayyab.mobileapp.R
+import com.tayyab.mobileapp.activities.MainActivityAdminViewModel
 import com.tayyab.mobileapp.adapters.ProductsAdapter
 import com.tayyab.mobileapp.adapters.ProductsCrudAdapter
 import com.tayyab.mobileapp.databinding.FragmentProductsBinding
@@ -52,6 +54,7 @@ class ProductsFragment : Fragment() {
     lateinit var startString: String
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<FrameLayout>
     var appSettings: AppSettings?=null
+    private val activityViewModel: MainActivityAdminViewModel by activityViewModels()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -75,9 +78,6 @@ class ProductsFragment : Fragment() {
                 adapter!!.get().insertData(t!!)
                 bindingx!!.get().progressBar.visibility = View.GONE
             })
-
-
-
         val recyclerWords: RecyclerView = bindingx!!.get().words
         val mLayoutManagerwords = LinearLayoutManager(context)
         recyclerWords.layoutManager = mLayoutManagerwords
@@ -93,13 +93,14 @@ class ProductsFragment : Fragment() {
                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                     // persistentBtn.text = "Show Bottom Sheet"
                 }
-                binding.imageView?.loadUrl(Config.IMAGE_BASE_URL + obj.pr_Picture)
+                binding.imageView.loadUrl(Config.IMAGE_BASE_URL + obj.pr_Picture)
                 binding.product = obj
-                val obj = object : OnSpeakClickListener{
-                    override fun onSpeakClick(obj: Product, shift: Boolean) {
-                        sendRequest(obj)
+                val objx = object : OnProductItemClickListener{
+                    override fun onItemClick(obj: Product) {
+                        activityViewModel.getDialogs(true,obj)
                     }
                 }
+                binding.productclicklistner=objx
 
                // binding.imageView?.loadUrl(Config.IMAGE_BASE_URL + obj.pr_Picture)
 //                binding.product = obj
