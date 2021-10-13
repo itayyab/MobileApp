@@ -16,5 +16,12 @@
         android:name="com.tayyab.mobileapp.admin.ProductsFragment"
         android:label="@string/products"
         tools:layout="@layout/fragment_products" />
+    <activity
+        android:id="@+id/nav_shop"
+        android:name="com.tayyab.mobileapp.activities.MainActivityShop"
+        android:label="Shop"
+        tools:layout="@layout/app_bar_main_activity_shop" />
+    <dialog android:id="@+id/nav_logout"
+        android:name="com.tayyab.mobileapp.dialogs.AppDialogFragment"/>
 
 </navigation>

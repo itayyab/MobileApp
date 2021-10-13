@@ -32,6 +32,7 @@ class ShopViewModel(application: Application) : AndroidViewModel(application) {
 //                    for (item: Product in ServerResponse) {
 //                    println(item.pr_name)
 //                    Log.e("RESP:", item.pr_name)
+//                        Log.e("RESP:", item.category.toString())
 //                }
             },
             { volleyError ->
@@ -58,7 +59,9 @@ class ShopViewModel(application: Application) : AndroidViewModel(application) {
             { ServerResponse ->
                 for (item: Product in ServerResponse) {
                     println(item.pr_name)
+
                     Log.e("RESP:", item.pr_name)
+                    Log.e("RESP:", item.categoryForeignKey.toString())
                 }
             },
             { volleyError ->

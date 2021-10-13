@@ -11,6 +11,7 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="bottomSheetDialogTheme">@style/BottomSheetDialogTheme</item>
         <!-- Customize your theme here. -->
     </style>
 
@@ -26,5 +27,19 @@
     <style name="CustomProgressBarHorizontal" parent="Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:minHeight">8dip</item>
         <item name="android:maxHeight">15dip</item>
+    </style>
+
+    <!-- set the rounded drawable as background to your bottom sheet -->
+<!--    <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog" />-->
+    <style name="BaseBottomSheetDialog" parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+    </style>
+    <style name="BottomSheet" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/shape_rounded_dialog</item>
+    </style>
+    <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/white</item>
     </style>
 </resources>

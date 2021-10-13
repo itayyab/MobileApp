@@ -62,7 +62,7 @@ class CategoriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         categoriesViewModel.getProductsStart().observe(viewLifecycleOwner,
-            Observer<List<Category>> { t ->
+            { t ->
                 Log.e("DBG:", "getProducts observed")
                 bindingx!!.get().progressBar.visibility = View.VISIBLE
                 adapter!!.get().insertData(t!!)

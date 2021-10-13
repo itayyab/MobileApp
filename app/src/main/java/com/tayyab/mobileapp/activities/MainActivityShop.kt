@@ -57,7 +57,7 @@ class MainActivityShop : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_categories, R.id.nav_products, R.id.nav_slideshow
+                R.id.nav_categories, R.id.nav_products
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -65,9 +65,10 @@ class MainActivityShop : AppCompatActivity() {
         bottomNavigationView= findViewById(R.id.bottom_navigation)
         //   setupActionBarWithNavController(navController)
         bottomNavigationView.setupWithNavController(navController)
+        bottomNavigationView.menu.removeItem(R.id.nav_logout)
 
 
-        viewModel!!.getProductsStart().observe(this,
+        viewModel.getProductsStart().observe(this,
             Observer<Int> { t ->
                 var badge = bottomNavigationView.getOrCreateBadge(R.id.nav_products)
                 badge.isVisible = true

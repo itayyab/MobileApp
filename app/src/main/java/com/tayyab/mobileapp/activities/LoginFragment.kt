@@ -3,6 +3,7 @@ package com.tayyab.mobileapp.activities
 import android.content.Intent
 import android.os.Bundle
 import android.util.Base64
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.android.volley.Request
 import com.android.volley.Response
+import com.android.volley.VolleyError
 import com.android.volley.toolbox.JsonObjectRequest
 import com.tayyab.mobileapp.Config
 import com.tayyab.mobileapp.R
@@ -19,7 +21,9 @@ import com.tayyab.mobileapp.utils.VolleySingleton
 import org.json.JSONObject
 import com.google.gson.Gson
 import com.tayyab.mobileapp.admin.MainActivityAdmin
+import com.tayyab.mobileapp.interfaces.AuthCallback
 import com.tayyab.mobileapp.utils.AppSettings
+import com.tayyab.mobileapp.utils.ShopApis
 import kotlin.collections.HashMap
 
 
@@ -29,7 +33,7 @@ import kotlin.collections.HashMap
 class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
-    var appSettings: AppSettings?=null
+    lateinit var appSettings: AppSettings
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -49,58 +53,115 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonFirst.setOnClickListener {
+        binding.btnRegister.setOnClickListener {
             findNavController().navigate(R.id.action_First2Fragment_to_Second2Fragment)
         }
-        appSettings= AppSettings(requireContext())
-        if(appSettings!!.getLoggedIn()){
-            val intent = Intent(this@LoginFragment.context, MainActivityAdmin::class.java)
-            //intent.putExtra("WID", obj.WID)
-            startActivity(intent)
-            activity?.finish()
+        appSettings = AppSettings(requireContext())
+        if (appSettings.getLoggedIn()) {
+            if (appSettings.getIsAdmin()) {
+                val intent = Intent(this@LoginFragment.context, MainActivityAdmin::class.java)
+                //intent.putExtra("WID", obj.WID)
+                startActivity(intent)
+                activity?.finish()
+            } else {
+                val intent = Intent(this@LoginFragment.context, MainActivityShop::class.java)
+                //intent.putExtra("WID", obj.WID)
+                startActivity(intent)
+                activity?.finish()
+            }
+
         }
         binding.btnLogin.setOnClickListener {
-            sendRequest()
+            binding.progressBar.visibility = View.VISIBLE
+            enabled(false)
+            val shopApis = ShopApis(requireContext())
+            if (checkAllFields()) {
+                shopApis.sendLoginRequest(
+                    binding.textUsername.editText?.text.toString(),
+                    binding.textPassword.editText?.text.toString(),
+                    object : AuthCallback {
+                        override fun onSuccess(result: JSONObject) {
+                            val token = result.get("token").toString()
+                            val extract = token.split(".")[1]
+                            val decodedBytes = Base64.decode(extract, Base64.DEFAULT);
+                            val decodedString = String(decodedBytes)
+                            val javaRootMapObject: Map<*, *> = Gson().fromJson(
+                                decodedString, Map::class.java
+                            )
+                            Toast.makeText(context, "Login Successful", Toast.LENGTH_LONG)
+                                .show()
+                            appSettings.saveLoggedIn(true)
+                            appSettings.saveToken(token)
+                            appSettings.saveIsAdmin(
+                                javaRootMapObject.get("role")!!.equals("ADMIN")
+                            )
+                            clearText()
+
+                            if (appSettings.getIsAdmin()) {
+                                val intent = Intent(this@LoginFragment.context, MainActivityAdmin::class.java)
+                                //intent.putExtra("WID", obj.WID)
+                                startActivity(intent)
+                                activity?.finish()
+                            } else {
+                                val intent = Intent(this@LoginFragment.context, MainActivityShop::class.java)
+                                //intent.putExtra("WID", obj.WID)
+                                startActivity(intent)
+                                activity?.finish()
+                            }
+                        }
+
+                        override fun onFailed(error: VolleyError) {
+                            Toast.makeText(
+                                context,
+                                "Login failed. Error:" + error.networkResponse.statusCode.toString(),
+                                Toast.LENGTH_LONG
+                            )
+                                .show()
+                            enabled(true)
+                        }
+                    }
+                )
+            } else {
+                enabled(true)
+            }
         }
+    }
+
+    private fun checkAllFields(): Boolean {
+        if (binding.textUsername.editText?.text.toString().isEmpty()) {
+            binding.textUsername.error = "Username is required"
+            return false
+        }
+        if (binding.textPassword.editText?.text.toString().isEmpty()) {
+            binding.textPassword.error = "Password is required"
+            return false
+        }
+        binding.textUsername.isErrorEnabled = false
+        binding.textPassword.isErrorEnabled = false
+
+        return true
+    }
+
+    fun clearText() {
+        binding.textUsername.editText?.text = null
+        binding.textPassword.editText?.text = null
+        enabled(true)
+    }
+
+    fun enabled(boolean: Boolean) {
+        binding.textUsername.isEnabled = boolean
+        binding.textPassword.isEnabled = boolean
+        binding.btnLogin.isEnabled = boolean
+        binding.btnRegister.isEnabled = boolean
+        if (boolean)
+            binding.progressBar.visibility = View.GONE
+
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-    fun sendRequest() {
 
-        val paramsx = HashMap<String,String>()
-        paramsx["username"] = "tayyab"
-        paramsx["password"] = "123456"
-        val jsonObjectx = JSONObject(paramsx as Map<*, *>)
-        val jsonArrayRequest = object : JsonObjectRequest(
-            Request.Method.POST,
-            Config.BASE_URL+"ApplicationUser/Login",
-            jsonObjectx,
-            Response.Listener { response ->
 
-                val token=  response.get("token").toString()
-                val extract= token.split(".")[1]
-                val decodedBytes = Base64.decode(extract,Base64.DEFAULT);
-                val decodedString = String(decodedBytes)
-                val javaRootMapObject: Map<*, *> = Gson().fromJson(
-                    decodedString,                    Map::class.java
-                )
-                Toast.makeText(context,decodedString.toString(),Toast.LENGTH_LONG).show()
-                appSettings?.saveLoggedIn(true)
-                appSettings?.saveToken(token)
-                appSettings?.saveIsAdmin(javaRootMapObject.get("role")!!.equals("ADMIN"))
-                val intent = Intent(this@LoginFragment.context, MainActivityAdmin::class.java)
-                //intent.putExtra("WID", obj.WID)
-                startActivity(intent)
-            },
-            Response.ErrorListener {  error ->// Do something when error occurred
-                Toast.makeText(context,error.message.toString(),Toast.LENGTH_LONG).show()
-            }
-        ) {
-        }
-
-        VolleySingleton.getInstance(requireContext()).addToRequestQueue(jsonArrayRequest)
-    }
 }
