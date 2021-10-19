@@ -29,4 +29,9 @@
     <string name="categories">Categories</string>
     <string name="products">Products</string>
     <string name="no_image">No Image</string>
+    <string name="no_products">No products added in the cart</string>
+    <string name="cart_empty">Cart Empty</string>
+    <string name="name">Name:</string>
+    <string name="quantity">Quantity:</string>
+    <string name="amount">Amount:</string>
 </resources>

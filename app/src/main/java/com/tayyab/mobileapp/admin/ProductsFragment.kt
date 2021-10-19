@@ -3,43 +3,30 @@ package com.tayyab.mobileapp.admin
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Base64
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.*
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.textfield.TextInputLayout
-import com.google.gson.Gson
 import com.squareup.picasso.Picasso
-import com.tayyab.mobileapp.Config
 import com.tayyab.mobileapp.R
 import com.tayyab.mobileapp.activities.MainActivityAdminViewModel
-import com.tayyab.mobileapp.adapters.ProductsAdapter
 import com.tayyab.mobileapp.adapters.ProductsCrudAdapter
 import com.tayyab.mobileapp.databinding.FragmentProductsBinding
-import com.tayyab.mobileapp.databinding.FragmentShopBinding
 import com.tayyab.mobileapp.interfaces.OnProductItemClickListener
-import com.tayyab.mobileapp.interfaces.OnSpeakClickListener
-import com.tayyab.mobileapp.models.CartDetail
-import com.tayyab.mobileapp.models.Carts
 import com.tayyab.mobileapp.models.Product
 import com.tayyab.mobileapp.ui.shop.ShopViewModel
 import com.tayyab.mobileapp.utils.AppSettings
 import com.tayyab.mobileapp.utils.AutoClearedValue
-import com.tayyab.mobileapp.utils.VolleySingleton
-import org.json.JSONObject
+import com.tayyab.mobileapp.utils.Config
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -63,7 +50,7 @@ class ProductsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         shopViewModel =
             ViewModelProvider(this).get(ShopViewModel::class.java)
@@ -79,7 +66,7 @@ class ProductsFragment : Fragment() {
                 bindingx!!.get().progressBar.visibility = View.GONE
             })
 
-        activityViewModel.dataupdated?.observe(viewLifecycleOwner, Observer { list ->
+        activityViewModel.dataupdated?.observe(viewLifecycleOwner, { list ->
             // Update the list UI
             Log.e("DBG:", "dataupdated observed")
             shopViewModel.getProducts()
@@ -113,7 +100,7 @@ class ProductsFragment : Fragment() {
         val textInputCustomEndIcon: TextInputLayout = bindingx!!.get().textinputlayout
 
         editText = _binding!!.edittext
-        textInputCustomEndIcon.isEndIconVisible = false;
+        textInputCustomEndIcon.isEndIconVisible = false
         textInputCustomEndIcon.setEndIconOnClickListener {
             if (editText.text!!.isNotEmpty()) {
                 editText.text = null
@@ -154,14 +141,6 @@ class ProductsFragment : Fragment() {
         })
         return binding.root
 
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-//        binding.buttonSecond.setOnClickListener {
-//            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
-//        }
     }
 
     override fun onDestroyView() {

@@ -1,6 +1,7 @@
 package com.tayyab.mobileapp.dialogs
 
 import android.app.Dialog
+import android.content.DialogInterface
 import android.content.res.Resources
 import android.os.Bundle
 import android.util.Base64
@@ -20,12 +21,12 @@ import com.tayyab.mobileapp.utils.ShopApis
 import org.json.JSONObject
 
 
-class LoginBottomSheetDialog : BottomSheetDialogFragment() {
+class LoginBottomSheetDialog(var authCallback: AuthCallback) : BottomSheetDialogFragment() {
     private var bottomSheetBehavior: BottomSheetBehavior<View>? = null
 
     private lateinit var appSettings: AppSettings
 
-    lateinit var productinputbinding: LayoutLoginBottomSheetBinding
+    private lateinit var productinputbinding: LayoutLoginBottomSheetBinding
     override fun getTheme(): Int = R.style.BottomSheetDialogTheme
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -49,7 +50,7 @@ class LoginBottomSheetDialog : BottomSheetDialogFragment() {
 
         bottomSheetBehavior!!.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(view: View, i: Int) {
-                if (BottomSheetBehavior.STATE_EXPANDED == i) {
+               /* if (BottomSheetBehavior.STATE_EXPANDED == i) {
 //                    bottomSheetBehavior!!.setPeekHeight(Resources.getSystem().getDisplayMetrics().heightPixels);
 //                    bottomSheetBehavior!!.setState(BottomSheetBehavior.STATE_EXPANDED);
 //                    showView(productinputbinding.appBarLayout, actionBarSize)
@@ -60,7 +61,7 @@ class LoginBottomSheetDialog : BottomSheetDialogFragment() {
 //                    hideAppBar(productinputbinding.appBarLayout)
 //                    showView(productinputbinding.mainContainer, actionBarSize)
                     productinputbinding.txtTitle.visibility = View.VISIBLE
-                }
+                }*/
                 if (BottomSheetBehavior.STATE_HIDDEN == i) {
                     dismiss()
                 }
@@ -81,7 +82,7 @@ class LoginBottomSheetDialog : BottomSheetDialogFragment() {
                         override fun onSuccess(result: JSONObject) {
                             val token = result.get("token").toString()
                             val extract = token.split(".")[1]
-                            val decodedBytes = Base64.decode(extract, Base64.DEFAULT);
+                            val decodedBytes = Base64.decode(extract, Base64.DEFAULT)
                             val decodedString = String(decodedBytes)
                             val javaRootMapObject: Map<*, *> = Gson().fromJson(
                                 decodedString, Map::class.java
@@ -91,9 +92,10 @@ class LoginBottomSheetDialog : BottomSheetDialogFragment() {
                             appSettings.saveLoggedIn(true)
                             appSettings.saveToken(token)
                             appSettings.saveIsAdmin(
-                                javaRootMapObject.get("role")!!.equals("ADMIN")
+                                javaRootMapObject.get("role")!! == "ADMIN"
                             )
                             clearText()
+                            authCallback.onSuccess(result)
                             dismiss()
 
                         }
@@ -114,9 +116,12 @@ class LoginBottomSheetDialog : BottomSheetDialogFragment() {
             }
         }
 
-        //hiding app bar at the start
-//        hideAppBar(productinputbinding.appBarLayout)
         return bottomSheet
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        authCallback.onFailed(VolleyError())
+        super.onDismiss(dialog)
     }
 
     override fun onStart() {

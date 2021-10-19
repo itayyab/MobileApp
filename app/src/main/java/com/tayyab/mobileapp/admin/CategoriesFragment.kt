@@ -12,7 +12,6 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,7 +35,6 @@ class CategoriesFragment : Fragment() {
     private var adapter: AutoClearedValue<CategoriesAdapter>? = null
     private var wordsadapter: CategoriesAdapter? = null
     lateinit var editText: EditText
-    lateinit var startString: String
 
     private val activityViewModel: MainActivityAdminViewModel by activityViewModels()
 
@@ -47,7 +45,7 @@ class CategoriesFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         categoriesViewModel =
             ViewModelProvider(this).get(CategoriesViewModel::class.java)
         _binding = FragmentCategoriesBinding.inflate(inflater, container, false)
@@ -68,7 +66,7 @@ class CategoriesFragment : Fragment() {
                 adapter!!.get().insertData(t!!)
                 bindingx!!.get().progressBar.visibility = View.GONE
             })
-        activityViewModel.dataupdated?.observe(viewLifecycleOwner, Observer { list ->
+        activityViewModel.dataupdated?.observe(viewLifecycleOwner, { list ->
             // Update the list UI
             Log.e("DBG:", "dataupdated observed")
             categoriesViewModel.getProducts()
@@ -91,7 +89,7 @@ class CategoriesFragment : Fragment() {
         editText = _binding!!.edittext
         //  editText = TextInputEditText(fragmentDicRecyclerBinding!!.textinputlayout.getContext());
         //   editText = TextInputEditText(binding!!.get().textinputlayout.context)
-        textInputCustomEndIcon.isEndIconVisible = false;
+        textInputCustomEndIcon.isEndIconVisible = false
         textInputCustomEndIcon.setEndIconOnClickListener {
             if (editText.text!!.isNotEmpty()) {
                 editText.text = null

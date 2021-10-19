@@ -3,22 +3,25 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/drawable/circle.xml" value="0.2755208333333333" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/drawable/ic_add.xml" value="0.2676923076923077" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/drawable/ic_cart.xml" value="0.2755208333333333" />
+        <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/drawable/ic_close.xml" value="0.2755208333333333" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/drawable/ic_openfile.xml" value="0.2755208333333333" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/drawable/shape_rounded_dialog.xml" value="0.2755208333333333" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/activity_auth.xml" value="0.2513586956521739" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/activity_main_admin.xml" value="0.23777173913043478" />
-        <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/activity_main_shop.xml" value="0.12436676798378926" />
+        <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/activity_main_shop.xml" value="0.264" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/app_bar_main_activity_admin.xml" value="0.23777173913043478" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/app_bar_main_activity_shop.xml" value="0.15307971014492755" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/cart_list_item.xml" value="0.259375" />
+        <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/cartdetails_list_item.xml" value="0.264" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/categories_input_dialog.xml" value="0.2713541666666667" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/categories_list_item.xml" value="0.259375" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/content_auth.xml" value="0.2513586956521739" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/content_main_activity_admin.xml" value="0.23777173913043478" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/content_main_activity_shop.xml" value="0.15307971014492755" />
-        <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/fragment_cart.xml" value="0.259375" />
+        <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/fragment_cart.xml" value="0.1970260223048327" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/fragment_categories.xml" value="0.259375" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/fragment_first.xml" value="0.23777173913043478" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/fragment_home.xml" value="0.15307971014492755" />
@@ -27,15 +30,17 @@
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/fragment_products.xml" value="0.259375" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/fragment_register.xml" value="0.264" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/fragment_second.xml" value="0.15307971014492755" />
-        <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/fragment_shop.xml" value="0.12436676798378926" />
+        <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/fragment_shop.xml" value="0.18596491228070175" />
+        <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/include_no_item.xml" value="0.2713541666666667" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/layout_bottom_sheet.xml" value="0.2" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/layout_categoryinput_bottom_sheet.xml" value="0.264" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/layout_login_bottom_sheet.xml" value="0.1" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/layout_productinput_bottom_sheet.xml" value="0.264" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/list_item.xml" value="0.12436676798378926" />
-        <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/nav_header_main_activity_shop.xml" value="0.11481481481481481" />
+        <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/nav_header_main_activity.xml" value="0.259375" />
+        <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/nav_header_main_activity_shop.xml" value="0.536" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/product_crud_list_item.xml" value="0.259375" />
-        <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/product_list_item.xml" value="0.259375" />
+        <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/product_list_item.xml" value="0.152" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/layout/products_input_dialog.xml" value="0.2" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/menu/activity_main_admin_drawer.xml" value="0.2713541666666667" />
         <entry key="..\:/AndroidDevelop/Dev/MobileApp/app/src/main/res/menu/activity_main_drawer.xml" value="0.259375" />

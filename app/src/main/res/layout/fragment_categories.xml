@@ -3,17 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-<!--    <data>-->
-
-<!--        <variable-->
-<!--            name="category"-->
-<!--            type="com.tayyab.mobileapp.models.Category" />-->
-
-<!--        <variable-->
-<!--            name="Speakclicklistner"-->
-<!--            type="com.tayyab.mobileapp.interfaces.OnSpeakClickListener" />-->
-<!--    </data>-->
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -111,9 +100,8 @@
 
                         </RelativeLayout>
 
-                        <ProgressBar
+                        <com.google.android.material.progressindicator.LinearProgressIndicator
                             android:id="@+id/progressBar"
-                            style="@style/CustomProgressBarHorizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:indeterminate="true"
@@ -122,7 +110,8 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/topPanel" />
+                            app:layout_constraintTop_toBottomOf="@id/topPanel"
+                            app:trackThickness="2dp" />
 
 
                         <androidx.recyclerview.widget.RecyclerView

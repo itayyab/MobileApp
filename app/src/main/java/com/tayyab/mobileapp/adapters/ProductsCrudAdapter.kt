@@ -8,14 +8,11 @@ import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import com.tayyab.mobileapp.Config
 import com.tayyab.mobileapp.databinding.ProductCrudListItemBinding
-import com.tayyab.mobileapp.databinding.ProductListItemBinding
 import com.tayyab.mobileapp.interfaces.OnProductItemClickListener
-import com.tayyab.mobileapp.interfaces.OnSpeakClickListener
 import com.tayyab.mobileapp.models.Product
-import java.util.*
-import kotlin.collections.ArrayList
+import com.tayyab.mobileapp.utils.Config
+import kotlin.streams.toList
 
 
 class ProductsCrudAdapter(rowLayout: Int, recyclerView: RecyclerView) :
@@ -23,21 +20,16 @@ class ProductsCrudAdapter(rowLayout: Int, recyclerView: RecyclerView) :
     Filterable {
 
     private var recyclerView: RecyclerView? = null
-   // private var shift: Boolean = false
     private var data: ArrayList<Product>? = null
     private var original: ArrayList<Product>? = null
     private var mOnProductItemClickListener: OnProductItemClickListener? = null
-    private var onSpeakClickListener: OnSpeakClickListener? = null
-
     private val rowLayout: Int
 
-    // internal var searchText = ""
     var int: Int = 0
 
     init {
         this.recyclerView = recyclerView
         this.rowLayout = rowLayout
-       // this.shift = shift
         this.data = ArrayList()
         this.original = ArrayList()
     }
@@ -45,14 +37,11 @@ class ProductsCrudAdapter(rowLayout: Int, recyclerView: RecyclerView) :
     fun setOnItemClickListener(mProductItemClickListener: OnProductItemClickListener) {
         this.mOnProductItemClickListener = mProductItemClickListener
     }
-    fun setOnSpeakClickListener(mItemClickListener: OnSpeakClickListener) {
-        this.onSpeakClickListener = mItemClickListener
-    }
 
     fun insertData(items: List<Product>) {
         if (items.size > data!!.size) {
             data!!.clear()
-            // original!!.clear()
+             original!!.clear()
             // int positionStart = getItemCount();
             // int itemCount = items.size();
             this.data!!.addAll(items)
@@ -77,14 +66,13 @@ class ProductsCrudAdapter(rowLayout: Int, recyclerView: RecyclerView) :
             val word: Product = data!![position]
             holder.itemBinding.product = word
             holder.itemBinding.clicklistner = mOnProductItemClickListener
-            holder.itemBinding.speakclicklistner = onSpeakClickListener
-            holder?.image_list?.loadUrl(Config.IMAGE_BASE_URL + data!![position].pr_Picture)
+            holder.imagelist?.loadUrl(Config.IMAGE_BASE_URL + data!![position].pr_Picture)
         }
     }
 
     class RecyclerViewHolder(wordListItemBinding: ProductCrudListItemBinding) :
         RecyclerView.ViewHolder(wordListItemBinding.root) {
-        var image_list: ImageView? = wordListItemBinding.imageView
+        var imagelist: ImageView? = wordListItemBinding.imageView
 
         val itemBinding: ProductCrudListItemBinding = wordListItemBinding
 
@@ -97,34 +85,21 @@ class ProductsCrudAdapter(rowLayout: Int, recyclerView: RecyclerView) :
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(charSequence: CharSequence): FilterResults {
-                val charString = charSequence.toString().toLowerCase(Locale.getDefault())
+                val charString = charSequence.toString()
                // Log.e("SSS", charString);
                 if (charString.isEmpty()) {
                     //  searchText = ""
                     data = original
                 } else {
-                    //    searchText = charString
-                    val filteredList = ArrayList<Product>()
-//                    for (item in original!!) {
-//                        if (item.synonym.isNullOrEmpty()) {
-//                            if (item.Word!!.contains(charString) || item.Meaning!!.contains(
-//                                    charString
-//                                )
-//                            ) {
-//                                filteredList.add(item)
-//                                //  Log.e("EEE",item.Word!!);
-//                            }
-//                        } else {
-//                            if (item.Word!!.contains(charString) || item.Meaning!!.contains(
-//                                    charString
-//                                ) || item.synonym!!.contains(charString)
-//                            ) {
-//                                filteredList.add(item)
-//                                //     Log.e("EEE",item.Word!!);
-//                            }
-//                        }
-//                    }
-                    data = filteredList
+                    val list = original?.stream()
+                        ?.filter { s ->
+                            s.pr_name.contains(
+                                charString,
+                                ignoreCase = true
+                            ) || s.pr_desc.contains(charString, ignoreCase = true)
+                        }?.toList()?.toCollection(ArrayList<Product>())
+
+                    data = list!!
                 }
                 val filterResults = FilterResults()
                 filterResults.values = data
@@ -140,7 +115,7 @@ class ProductsCrudAdapter(rowLayout: Int, recyclerView: RecyclerView) :
         }
 
     }
-    fun ImageView.loadUrl(url: String) {
+    private fun ImageView.loadUrl(url: String) {
         Picasso.with(context).load(url).into(this)
     }
 }

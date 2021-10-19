@@ -1,25 +1,16 @@
 package com.tayyab.mobileapp.activities
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Base64
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
-import com.android.volley.Request
-import com.android.volley.Response
 import com.android.volley.VolleyError
-import com.android.volley.toolbox.JsonObjectRequest
-import com.google.gson.Gson
-import com.tayyab.mobileapp.Config
 import com.tayyab.mobileapp.R
-import com.tayyab.mobileapp.admin.MainActivityAdmin
 import com.tayyab.mobileapp.databinding.FragmentRegisterBinding
 import com.tayyab.mobileapp.interfaces.AuthCallback
-import com.tayyab.mobileapp.utils.VolleySingleton
 import org.json.JSONObject
 import android.text.TextUtils
 import android.util.Patterns
@@ -40,7 +31,7 @@ class RegisterFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentRegisterBinding.inflate(inflater, container, false)
         return binding.root
@@ -103,7 +94,7 @@ class RegisterFragment : Fragment() {
         }
     }
 
-    fun isValidEmail(target: CharSequence): Boolean {
+    private fun isValidEmail(target: CharSequence): Boolean {
         return if (TextUtils.isEmpty(target)) {
             false
         } else {

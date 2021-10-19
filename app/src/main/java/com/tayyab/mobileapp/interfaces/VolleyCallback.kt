@@ -6,6 +6,6 @@ import java.util.ArrayList
 
 interface VolleyCallback {
     fun onSuccess(result: String)
-    fun onError(error:VolleyError)
+    fun onError(error: VolleyError)
     fun onSuccessArrayList(result: ArrayList<Category>)
 }

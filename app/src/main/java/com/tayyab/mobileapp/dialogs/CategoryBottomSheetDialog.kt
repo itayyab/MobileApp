@@ -15,7 +15,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.tayyab.mobileapp.R
 import com.tayyab.mobileapp.activities.MainActivityAdminViewModel
 import com.tayyab.mobileapp.databinding.LayoutCategoryinputBottomSheetBinding
-import com.tayyab.mobileapp.interfaces.SelectImageListener
+import com.tayyab.mobileapp.interfaces.AuthCallback
 import com.tayyab.mobileapp.interfaces.VolleyCRUDCallback
 import com.tayyab.mobileapp.models.Category
 import com.tayyab.mobileapp.utils.AppSettings
@@ -30,7 +30,7 @@ class CategoryBottomSheetDialog : BottomSheetDialogFragment() {
     private lateinit var appSettings: AppSettings
     var category: Category? = null
 
-    lateinit var productinputbinding: LayoutCategoryinputBottomSheetBinding
+    private lateinit var productinputbinding: LayoutCategoryinputBottomSheetBinding
     override fun getTheme(): Int = R.style.BottomSheetDialogTheme
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,8 +41,7 @@ class CategoryBottomSheetDialog : BottomSheetDialogFragment() {
             productinputbinding.btnUpdate.visibility = View.VISIBLE
             productinputbinding.btnDelete.visibility = View.VISIBLE
             productinputbinding.btnSave.visibility = View.GONE
-            productinputbinding.txtTitle.text="Edit Category"
-            productinputbinding.nameToolbar.text="Edit Category"
+            productinputbinding.txtTitle.text = "Edit Category"
         } else {
             productinputbinding.btnUpdate.visibility = View.GONE
             productinputbinding.btnDelete.visibility = View.GONE
@@ -72,18 +71,6 @@ class CategoryBottomSheetDialog : BottomSheetDialogFragment() {
 
         bottomSheetBehavior!!.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(view: View, i: Int) {
-                if (BottomSheetBehavior.STATE_EXPANDED == i) {
-//                    bottomSheetBehavior!!.setPeekHeight(Resources.getSystem().getDisplayMetrics().heightPixels);
-//                    bottomSheetBehavior!!.setState(BottomSheetBehavior.STATE_EXPANDED);
-                    showView(productinputbinding.appBarLayout, actionBarSize)
-                    hideAppBar(productinputbinding.mainContainer)
-                    productinputbinding.txtTitle.visibility = View.GONE
-                }
-                if (BottomSheetBehavior.STATE_COLLAPSED == i) {
-                    hideAppBar(productinputbinding.appBarLayout)
-                    showView(productinputbinding.mainContainer, actionBarSize)
-                    productinputbinding.txtTitle.visibility = View.VISIBLE
-                }
                 if (BottomSheetBehavior.STATE_HIDDEN == i) {
                     dismiss()
                 }
@@ -101,10 +88,9 @@ class CategoryBottomSheetDialog : BottomSheetDialogFragment() {
         productinputbinding.btnCancel.setOnClickListener { dismiss() }
 
         productinputbinding.btnDelete.setOnClickListener {
-            productinputbinding.progressBar.visibility = View.VISIBLE
             enabled(false)
             val shopApis = ShopApis(requireContext())
-            shopApis.deleteCategoryRequest(category!!,object :VolleyCRUDCallback{
+            shopApis.deleteCategoryRequest(category!!, object : VolleyCRUDCallback {
                 override fun onSuccess(result: JSONObject) {
                     viewModel.getDataUpdated()
                     Toast.makeText(
@@ -124,13 +110,11 @@ class CategoryBottomSheetDialog : BottomSheetDialogFragment() {
                 override fun onAuthFailed(statusCode: Int) {
                     appSettings.saveLoggedIn(false)
                     login()
-                    enabled(true)
                 }
             })
 
         }
         productinputbinding.btnSave.setOnClickListener {
-            productinputbinding.progressBar.visibility = View.VISIBLE
             enabled(false)
             if (checkAllFields()) {
                 val category =
@@ -140,23 +124,31 @@ class CategoryBottomSheetDialog : BottomSheetDialogFragment() {
                         null
                     )
                 val shopApis = ShopApis(requireContext())
-                shopApis.postCategoryRequest(category,object : VolleyCRUDCallback{
+                shopApis.postCategoryRequest(category, object : VolleyCRUDCallback {
                     override fun onSuccess(result: JSONObject) {
                         viewModel.getDataUpdated()
-                        Toast.makeText(requireContext(), "Category Added Successfully", Toast.LENGTH_LONG)
+                        Toast.makeText(
+                            requireContext(),
+                            "Category Added Successfully",
+                            Toast.LENGTH_LONG
+                        )
                             .show()
                         clearText()
+                        dismiss()
                     }
 
                     override fun onError(error: VolleyError) {
-                        Toast.makeText(requireContext(), error.message.toString(), Toast.LENGTH_LONG)
+                        Toast.makeText(
+                            requireContext(),
+                            error.message.toString(),
+                            Toast.LENGTH_LONG
+                        )
                             .show()
                     }
 
                     override fun onAuthFailed(statusCode: Int) {
                         appSettings.saveLoggedIn(false)
                         login()
-                        enabled(true)
                     }
                 })
 
@@ -165,7 +157,6 @@ class CategoryBottomSheetDialog : BottomSheetDialogFragment() {
             }
         }
         productinputbinding.btnUpdate.setOnClickListener {
-            productinputbinding.progressBar.visibility = View.VISIBLE
             enabled(false)
             if (checkAllFields()) {
                 val shopApis = ShopApis(requireContext())
@@ -175,7 +166,7 @@ class CategoryBottomSheetDialog : BottomSheetDialogFragment() {
                         productinputbinding.txtCategoryName.editText?.text.toString(),
                         null
                     )
-                shopApis.updateCategoryRequest(categoryx,object : VolleyCRUDCallback{
+                shopApis.updateCategoryRequest(categoryx, object : VolleyCRUDCallback {
                     override fun onSuccess(result: JSONObject) {
                         viewModel.getDataUpdated()
                         Toast.makeText(
@@ -199,7 +190,6 @@ class CategoryBottomSheetDialog : BottomSheetDialogFragment() {
                     override fun onAuthFailed(statusCode: Int) {
                         appSettings.saveLoggedIn(false)
                         login()
-                        enabled(true)
                     }
                 })
             } else {
@@ -207,8 +197,7 @@ class CategoryBottomSheetDialog : BottomSheetDialogFragment() {
             }
         }
 
-        //hiding app bar at the start
-        hideAppBar(productinputbinding.appBarLayout)
+
         return bottomSheet
     }
 
@@ -218,30 +207,9 @@ class CategoryBottomSheetDialog : BottomSheetDialogFragment() {
     }
 
 
-    private fun hideAppBar(view: View) {
-        val params = view.layoutParams
-        params.height = 0
-        view.layoutParams = params
-    }
-
-    private fun showView(view: View, size: Int) {
-        val params = view.layoutParams
-        params.height = size
-        view.layoutParams = params
-    }
-
     fun setViewModel(viewModel: MainActivityAdminViewModel) {
         this.viewModel = viewModel
     }
-
-
-    private val actionBarSize: Int
-        get() {
-            val array =
-                requireContext().theme.obtainStyledAttributes(intArrayOf(R.attr.actionBarSize))
-            return array.getDimension(0, 0f).toInt()
-        }
-
 
     private fun checkAllFields(): Boolean {
         if (productinputbinding.txtCategoryName.editText?.text.toString().isEmpty()) {
@@ -262,18 +230,24 @@ class CategoryBottomSheetDialog : BottomSheetDialogFragment() {
     }
 
     fun enabled(boolean: Boolean) {
-        productinputbinding.txtCategoryName.isEnabled = boolean
-        productinputbinding.btnDelete.isEnabled = boolean
-        productinputbinding.btnUpdate.isEnabled = boolean
-        productinputbinding.btnSave.isEnabled = boolean
-        productinputbinding.btnCancel.isEnabled = boolean
-        if (boolean)
-            productinputbinding.progressBar.visibility = View.GONE
+        if (boolean) {
+            productinputbinding.viewDisableLayout.visibility = View.GONE
+        } else {
+            productinputbinding.viewDisableLayout.visibility = View.VISIBLE
+        }
 
     }
 
-    fun login(){
-        val bottomSheet = LoginBottomSheetDialog()
+    fun login() {
+        val bottomSheet = LoginBottomSheetDialog(object : AuthCallback {
+            override fun onSuccess(result: JSONObject) {
+                enabled(true)
+            }
+
+            override fun onFailed(error: VolleyError) {
+                enabled(true)
+            }
+        })
         bottomSheet.show(childFragmentManager, "")
     }
 

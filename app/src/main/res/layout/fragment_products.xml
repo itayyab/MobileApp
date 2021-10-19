@@ -2,14 +2,18 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="product"
             type="com.tayyab.mobileapp.models.Product" />
+
         <variable
             name="Productclicklistner"
-            type="com.tayyab.mobileapp.interfaces.OnProductItemClickListener"/>
+            type="com.tayyab.mobileapp.interfaces.OnProductItemClickListener" />
     </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -42,11 +46,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="?actionBarSize"
                             android:background="@color/white"
-                            app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toTopOf="@+id/progressBar"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent">
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
 
 
                             <RelativeLayout
@@ -92,9 +96,9 @@
                                     android:layout_centerVertical="true"
                                     android:layout_marginStart="10dp"
                                     android:layout_marginEnd="5dp"
-                                    app:tint="?attr/colorPrimary"
                                     android:visibility="visible"
-                                    app:srcCompat="@drawable/ic_search" />
+                                    app:srcCompat="@drawable/ic_search"
+                                    app:tint="?attr/colorPrimary" />
                             </RelativeLayout>
 
                             <View
@@ -106,18 +110,19 @@
 
 
                         </RelativeLayout>
-                        <ProgressBar
-                            android:visibility="visible"
+
+                        <com.google.android.material.progressindicator.LinearProgressIndicator
                             android:id="@+id/progressBar"
-                            style="@style/CustomProgressBarHorizontal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:indeterminate="true"
+                            android:visibility="visible"
                             app:layout_constraintBottom_toTopOf="@+id/words"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/topPanel" />
+                            app:layout_constraintTop_toBottomOf="@id/topPanel"
+                            app:trackThickness="2dp" />
 
 
                         <androidx.recyclerview.widget.RecyclerView
@@ -138,24 +143,25 @@
 
             </androidx.cardview.widget.CardView>
         </RelativeLayout>
+
         <FrameLayout
             android:id="@+id/standard_bottom_sheet"
-            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
             style="?attr/bottomSheetStyle"
-            app:behavior_peekHeight="0dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:behavior_peekHeight="0dp"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
             <!-- Bottom sheet contents. -->
             <RelativeLayout
-                android:background="@color/white"
                 android:id="@+id/re"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/white"
                 android:orientation="horizontal"
-                android:paddingBottom="0dp"
                 android:paddingLeft="0dp"
-                android:paddingTop="0dp">
+                android:paddingTop="0dp"
+                android:paddingBottom="0dp">
 
                 <ImageView
                     android:id="@+id/imageView"
@@ -163,28 +169,30 @@
                     android:layout_height="220dp"
                     android:adjustViewBounds="true"
                     android:background="?android:attr/selectableItemBackground"
-                    android:scaleType="centerCrop"
-                    />
+                    android:scaleType="centerCrop" />
+
                 <View
                     android:id="@+id/divider3"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_below="@id/imageView"            android:background="?android:attr/listDivider" />
+                    android:layout_below="@id/imageView"
+                    android:background="?android:attr/listDivider" />
+
                 <RelativeLayout
                     android:id="@+id/rel2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/imageView"
-                    android:padding="5dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
                     <TextView
-                        android:layout_weight="1"
-                        android:layout_toStartOf="@id/btnAddCart"
-                        android:layout_centerVertical="true"
                         android:id="@+id/list_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:layout_marginTop="0dp"
+                        android:layout_toStartOf="@id/btnAddCart"
                         android:gravity="fill"
                         android:padding="5dp"
                         android:text="@{product.pr_name}"
@@ -193,46 +201,48 @@
 
 
                     <Button
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
                         android:id="@+id/btnAddCart"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
                         android:onClick="@{() -> Productclicklistner.onItemClick(product)}"
-                        android:text="Edit"
-                        />
+                        android:text="Edit" />
                 </RelativeLayout>
+
                 <ToggleButton
-                    android:layout_below="@id/imageView"
                     android:id="@+id/toggleButton"
                     style="@style/Widget.AppCompat.Button.Borderless"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:layout_below="@id/imageView"
                     android:layout_alignParentEnd="true"
                     android:drawableTop="@drawable/ic_close"
-                    android:visibility="gone"
                     android:text=""
                     android:textOff=""
-                    android:textOn="" />
+                    android:textOn=""
+                    android:visibility="gone" />
+
                 <LinearLayout
                     android:id="@+id/lnx"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentTop="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
                     android:background="@drawable/date_bg"
-                    android:padding="3dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="3dp">
 
                     <TextView
-                        android:gravity="center_horizontal"
                         android:id="@+id/txtCat"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/white"
-                        android:text="@{product.category.cat_name}" />
+                        android:gravity="center_horizontal"
+                        android:text="@{product.category.cat_name}"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
+
                 <TextView
                     android:id="@+id/list_titlex"
                     android:layout_width="match_parent"

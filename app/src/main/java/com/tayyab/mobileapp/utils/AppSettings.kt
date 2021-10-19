@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 
 class AppSettings(// Context
-    private val _context: Context
+    _context: Context
 ) {
-    private val pref: SharedPreferences
+    private val pref: SharedPreferences = _context.getSharedPreferences(PREF_NAME, 0)
 
     companion object {
         // User name (make variable public to access from outside)
@@ -14,12 +14,6 @@ class AppSettings(// Context
         private const val PREF_NAME = "MASettings"
         private const val KEY_LOGGEDIN = "loggedin"
         private const val KEY_ISADMIN = "isAdmin"
-    }
-
-    // Constructor
-    init {
-        // Shared pref mode
-        pref = _context.getSharedPreferences(PREF_NAME, 0)
     }
 
     fun saveToken(text: String?) {

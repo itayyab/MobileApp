@@ -20,7 +20,7 @@ class AppDialogFragment : DialogFragment() {
             .setMessage("Do you want to Logout?")
             // Confirming action
             .setPositiveButton("Yes") { dialog, which ->
-                var appSettings: AppSettings = AppSettings(requireContext())
+                val appSettings = AppSettings(requireContext())
                 appSettings.saveLoggedIn(false)
                 val intent = Intent(requireContext(), AuthActivity::class.java)
                 startActivity(intent)

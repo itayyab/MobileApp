@@ -3,28 +3,22 @@ package com.tayyab.mobileapp.activities
 import android.content.Intent
 import android.os.Bundle
 import android.util.Base64
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.android.volley.Request
-import com.android.volley.Response
 import com.android.volley.VolleyError
-import com.android.volley.toolbox.JsonObjectRequest
-import com.tayyab.mobileapp.Config
-import com.tayyab.mobileapp.R
-import com.tayyab.mobileapp.databinding.FragmentLoginBinding
-import com.tayyab.mobileapp.utils.VolleySingleton
-import org.json.JSONObject
 import com.google.gson.Gson
+import com.tayyab.mobileapp.R
 import com.tayyab.mobileapp.admin.MainActivityAdmin
+import com.tayyab.mobileapp.databinding.FragmentLoginBinding
 import com.tayyab.mobileapp.interfaces.AuthCallback
 import com.tayyab.mobileapp.utils.AppSettings
+import com.tayyab.mobileapp.utils.AuthUtils
 import com.tayyab.mobileapp.utils.ShopApis
-import kotlin.collections.HashMap
+import org.json.JSONObject
 
 
 /**
@@ -42,7 +36,7 @@ class LoginFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
 
@@ -57,20 +51,32 @@ class LoginFragment : Fragment() {
             findNavController().navigate(R.id.action_First2Fragment_to_Second2Fragment)
         }
         appSettings = AppSettings(requireContext())
-        if (appSettings.getLoggedIn()) {
-            if (appSettings.getIsAdmin()) {
-                val intent = Intent(this@LoginFragment.context, MainActivityAdmin::class.java)
-                //intent.putExtra("WID", obj.WID)
-                startActivity(intent)
-                activity?.finish()
-            } else {
-                val intent = Intent(this@LoginFragment.context, MainActivityShop::class.java)
-                //intent.putExtra("WID", obj.WID)
-                startActivity(intent)
-                activity?.finish()
-            }
+        val authUtils = AuthUtils(requireContext())
+        val tstamp = System.currentTimeMillis()/1000
+//        Log.e("TOKEN",appSettings.getToken().toString())
+//        Log.e("TOKEN",authUtils.getTokenExp().toLong().toString() +">" +tstamp)
+        appSettings.saveLoggedIn(true)
+        appSettings.saveToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhYTcxOWZjOC0yMDEzLTRhZmEtODdkZi1kYmY4NTQ2NzEyYjciLCJyb2xlIjoiQURNSU4iLCJuYmYiOjE2MzQzMTc5MjcsImV4cCI6MTYzNDQwNDMyNywiaWF0IjoxNjM0MzE3OTI3fQ.9MXTMbe5KPVNpLebPnxeKs1dLq0IkW0BFg7nIRR8TcY")
+//        if (authUtils.getTokenExp().toLong() > tstamp) {
+            if (appSettings.getLoggedIn()) {
+                if (appSettings.getIsAdmin()) {
+                    val intent = Intent(this@LoginFragment.context, MainActivityAdmin::class.java)
+                    //intent.putExtra("WID", obj.WID)
+                    startActivity(intent)
+                    activity?.finish()
+                } else {
+                    val intent = Intent(this@LoginFragment.context, MainActivityShop::class.java)
+                    //intent.putExtra("WID", obj.WID)
+                    startActivity(intent)
+                    activity?.finish()
+                }
 
-        }
+            }
+//        }
+
+
+
+
         binding.btnLogin.setOnClickListener {
             binding.progressBar.visibility = View.VISIBLE
             enabled(false)
@@ -83,7 +89,7 @@ class LoginFragment : Fragment() {
                         override fun onSuccess(result: JSONObject) {
                             val token = result.get("token").toString()
                             val extract = token.split(".")[1]
-                            val decodedBytes = Base64.decode(extract, Base64.DEFAULT);
+                            val decodedBytes = Base64.decode(extract, Base64.DEFAULT)
                             val decodedString = String(decodedBytes)
                             val javaRootMapObject: Map<*, *> = Gson().fromJson(
                                 decodedString, Map::class.java
@@ -93,17 +99,21 @@ class LoginFragment : Fragment() {
                             appSettings.saveLoggedIn(true)
                             appSettings.saveToken(token)
                             appSettings.saveIsAdmin(
-                                javaRootMapObject.get("role")!!.equals("ADMIN")
+                                javaRootMapObject.get("role")!! == "ADMIN"
                             )
                             clearText()
 
                             if (appSettings.getIsAdmin()) {
-                                val intent = Intent(this@LoginFragment.context, MainActivityAdmin::class.java)
+                                val intent = Intent(
+                                    this@LoginFragment.context,
+                                    MainActivityAdmin::class.java
+                                )
                                 //intent.putExtra("WID", obj.WID)
                                 startActivity(intent)
                                 activity?.finish()
                             } else {
-                                val intent = Intent(this@LoginFragment.context, MainActivityShop::class.java)
+                                val intent =
+                                    Intent(this@LoginFragment.context, MainActivityShop::class.java)
                                 //intent.putExtra("WID", obj.WID)
                                 startActivity(intent)
                                 activity?.finish()

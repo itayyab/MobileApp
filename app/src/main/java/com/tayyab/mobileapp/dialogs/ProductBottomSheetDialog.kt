@@ -25,12 +25,9 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCa
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.tayyab.mobileapp.R
-import com.tayyab.mobileapp.activities.AuthActivity
 import com.tayyab.mobileapp.activities.MainActivityAdminViewModel
 import com.tayyab.mobileapp.databinding.LayoutProductinputBottomSheetBinding
-import com.tayyab.mobileapp.interfaces.SelectImageListener
-import com.tayyab.mobileapp.interfaces.VolleyCRUDCallback
-import com.tayyab.mobileapp.interfaces.VolleyCallback
+import com.tayyab.mobileapp.interfaces.*
 import com.tayyab.mobileapp.models.Category
 import com.tayyab.mobileapp.models.Product
 import com.tayyab.mobileapp.utils.AppSettings
@@ -59,8 +56,7 @@ class ProductBottomSheetDialog : BottomSheetDialogFragment() {
             productinputbinding.btnUpdate.visibility = View.VISIBLE
             productinputbinding.btnDelete.visibility = View.VISIBLE
             productinputbinding.btnSave.visibility = View.GONE
-            productinputbinding.txtTitle.text="Edit Product"
-            productinputbinding.nameToolbar.text="Edit Product"
+            productinputbinding.txtTitle.text = "Edit Product"
         } else {
             productinputbinding.btnUpdate.visibility = View.GONE
             productinputbinding.btnDelete.visibility = View.GONE
@@ -90,16 +86,6 @@ class ProductBottomSheetDialog : BottomSheetDialogFragment() {
 
         bottomSheetBehavior!!.addBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(view: View, i: Int) {
-                if (BottomSheetBehavior.STATE_EXPANDED == i) {
-                    showView(productinputbinding.appBarLayout, actionBarSize)
-                    hideAppBar(productinputbinding.mainContainer)
-                    productinputbinding.txtTitle.visibility = View.GONE
-                }
-                if (BottomSheetBehavior.STATE_COLLAPSED == i) {
-                    hideAppBar(productinputbinding.appBarLayout)
-                    showView(productinputbinding.mainContainer, actionBarSize)
-                    productinputbinding.txtTitle.visibility = View.VISIBLE
-                }
                 if (BottomSheetBehavior.STATE_HIDDEN == i) {
                     dismiss()
                 }
@@ -109,7 +95,7 @@ class ProductBottomSheetDialog : BottomSheetDialogFragment() {
         })
 
 
-        productinputbinding.progressBar.visibility = View.VISIBLE
+//        productinputbinding.progressBar.visibility = View.VISIBLE
         enabled(false)
         val shopApis = ShopApis(requireContext())
         shopApis.getCats(object : VolleyCallback {
@@ -128,7 +114,7 @@ class ProductBottomSheetDialog : BottomSheetDialogFragment() {
                 (productinputbinding.selectCategory.editText as? AutoCompleteTextView)?.setAdapter(
                     adapter
                 )
-                productinputbinding.progressBar.visibility = View.VISIBLE
+//                productinputbinding.progressBar.visibility = View.VISIBLE
                 enabled(true)
                 if (editProduct) {
                     productinputbinding.txtProductName.editText?.setText(product?.pr_name)
@@ -164,7 +150,7 @@ class ProductBottomSheetDialog : BottomSheetDialogFragment() {
         productinputbinding.btnCancel.setOnClickListener { dismiss() }
 
         productinputbinding.btnDelete.setOnClickListener {
-            productinputbinding.progressBar.visibility = View.VISIBLE
+//            productinputbinding.progressBar.visibility = View.VISIBLE
             enabled(false)
             val shopApis = ShopApis(requireContext())
             shopApis.deleteProductRequest(product!!, object : VolleyCRUDCallback {
@@ -188,12 +174,11 @@ class ProductBottomSheetDialog : BottomSheetDialogFragment() {
                 override fun onAuthFailed(statusCode: Int) {
                     appSettings.saveLoggedIn(false)
                     login()
-                    enabled(true)
                 }
             })
         }
         productinputbinding.btnSave.setOnClickListener {
-            productinputbinding.progressBar.visibility = View.VISIBLE
+//            productinputbinding.progressBar.visibility = View.VISIBLE
             enabled(false)
             if (checkAllFields()) {
                 val catid = categoryList?.stream()
@@ -224,7 +209,7 @@ class ProductBottomSheetDialog : BottomSheetDialogFragment() {
             }
         }
         productinputbinding.btnUpdate.setOnClickListener {
-            productinputbinding.progressBar.visibility = View.VISIBLE
+//            productinputbinding.progressBar.visibility = View.VISIBLE
             enabled(false)
             if (checkAllFields()) {
                 val catid = categoryList?.stream()
@@ -278,8 +263,6 @@ class ProductBottomSheetDialog : BottomSheetDialogFragment() {
             }
         })
 
-        //hiding app bar at the start
-        hideAppBar(productinputbinding.appBarLayout)
         return bottomSheet
     }
 
@@ -303,23 +286,24 @@ class ProductBottomSheetDialog : BottomSheetDialogFragment() {
         bmp!!.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val imageBytes = baos.toByteArray()
         val shopApis = ShopApis(requireContext())
-        shopApis.uploadBitmap(imageBytes, object : VolleyCallback {
+        shopApis.uploadBitmap(imageBytes, object : VolleyImageUploadCallback {
             override fun onSuccess(result: String) {
                 product.pr_Picture = result
                 addProduct(product)
             }
 
-            override fun onSuccessArrayList(result: ArrayList<Category>) {
-                TODO("Not yet implemented")
+            override fun onAuthFailed(statusCode: Int) {
+                appSettings.saveLoggedIn(false)
+                login()
             }
 
             override fun onError(error: VolleyError) {
                 Toast.makeText(
                     requireContext(),
-                    error.message,
+                    error.message.toString(),
                     Toast.LENGTH_SHORT
                 ).show()
-                enabled(true)
+//                enabled(true)
             }
         })
 
@@ -331,23 +315,23 @@ class ProductBottomSheetDialog : BottomSheetDialogFragment() {
         bmp!!.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val imageBytes = baos.toByteArray()
         val shopApis = ShopApis(requireContext())
-        shopApis.uploadBitmap(imageBytes, object : VolleyCallback {
+        shopApis.uploadBitmap(imageBytes, object : VolleyImageUploadCallback {
             override fun onSuccess(result: String) {
                 product.pr_Picture = result
                 updateProduct(product)
             }
 
-            override fun onSuccessArrayList(result: ArrayList<Category>) {
-                TODO("Not yet implemented")
+            override fun onAuthFailed(statusCode: Int) {
+                appSettings.saveLoggedIn(false)
+                login()
             }
 
             override fun onError(error: VolleyError) {
                 Toast.makeText(
                     requireContext(),
-                    error.message,
+                    error.message.toString(),
                     Toast.LENGTH_SHORT
                 ).show()
-                enabled(true)
             }
         })
 
@@ -361,6 +345,7 @@ class ProductBottomSheetDialog : BottomSheetDialogFragment() {
                 Toast.makeText(requireContext(), "Product Added Successfully", Toast.LENGTH_LONG)
                     .show()
                 clearText()
+                dismiss()
             }
 
             override fun onError(error: VolleyError) {
@@ -372,7 +357,6 @@ class ProductBottomSheetDialog : BottomSheetDialogFragment() {
             override fun onAuthFailed(statusCode: Int) {
                 appSettings.saveLoggedIn(false)
                 login()
-                enabled(true)
             }
         })
     }
@@ -394,7 +378,7 @@ class ProductBottomSheetDialog : BottomSheetDialogFragment() {
             override fun onError(error: VolleyError) {
                 Toast.makeText(
                     requireContext(),
-                    "Eroor:" + error.message.toString(),
+                    "Error:" + error.message.toString(),
                     Toast.LENGTH_LONG
                 )
                     .show()
@@ -404,7 +388,6 @@ class ProductBottomSheetDialog : BottomSheetDialogFragment() {
             override fun onAuthFailed(statusCode: Int) {
                 appSettings.saveLoggedIn(false)
                 login()
-                enabled(true)
             }
         })
     }
@@ -429,29 +412,10 @@ class ProductBottomSheetDialog : BottomSheetDialogFragment() {
 
     }
 
-    private fun hideAppBar(view: View) {
-        val params = view.layoutParams
-        params.height = 0
-        view.layoutParams = params
-    }
-
-    private fun showView(view: View, size: Int) {
-        val params = view.layoutParams
-        params.height = size
-        view.layoutParams = params
-    }
 
     fun setViewModel(viewModel: MainActivityAdminViewModel) {
         this.viewModel = viewModel
     }
-
-
-    private val actionBarSize: Int
-        get() {
-            val array =
-                requireContext().theme.obtainStyledAttributes(intArrayOf(R.attr.actionBarSize))
-            return array.getDimension(0, 0f).toInt()
-        }
 
 
     private fun checkAllFields(): Boolean {
@@ -491,20 +455,24 @@ class ProductBottomSheetDialog : BottomSheetDialogFragment() {
     }
 
     fun enabled(boolean: Boolean) {
-        productinputbinding.txtProductName.isEnabled = boolean
-        productinputbinding.txtProductDesc.isEnabled = boolean
-        productinputbinding.txtProductPrice.isEnabled = boolean
-        productinputbinding.selectCategory.isEnabled = boolean
-        productinputbinding.btnDelete.isEnabled = boolean
-        productinputbinding.btnUpdate.isEnabled = boolean
-        productinputbinding.btnSave.isEnabled = boolean
-        productinputbinding.btnCancel.isEnabled = boolean
-        if (boolean)
-            productinputbinding.progressBar.visibility = View.GONE
+        if (boolean) {
+            productinputbinding.viewDisableLayout.visibility = View.GONE
+        } else {
+            productinputbinding.viewDisableLayout.visibility = View.VISIBLE
+        }
 
     }
-    fun login(){
-        val bottomSheet = LoginBottomSheetDialog()
+
+    fun login() {
+        val bottomSheet = LoginBottomSheetDialog(object : AuthCallback {
+            override fun onSuccess(result: JSONObject) {
+                enabled(true)
+            }
+
+            override fun onFailed(error: VolleyError) {
+                enabled(true)
+            }
+        })
         bottomSheet.show(childFragmentManager, "")
     }
 }
