@@ -52,30 +52,25 @@ class LoginFragment : Fragment() {
         }
         appSettings = AppSettings(requireContext())
         val authUtils = AuthUtils(requireContext())
-        val tstamp = System.currentTimeMillis()/1000
+        val tstamp = System.currentTimeMillis() / 1000
 //        Log.e("TOKEN",appSettings.getToken().toString())
 //        Log.e("TOKEN",authUtils.getTokenExp().toLong().toString() +">" +tstamp)
-        appSettings.saveLoggedIn(true)
-        appSettings.saveToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhYTcxOWZjOC0yMDEzLTRhZmEtODdkZi1kYmY4NTQ2NzEyYjciLCJyb2xlIjoiQURNSU4iLCJuYmYiOjE2MzQzMTc5MjcsImV4cCI6MTYzNDQwNDMyNywiaWF0IjoxNjM0MzE3OTI3fQ.9MXTMbe5KPVNpLebPnxeKs1dLq0IkW0BFg7nIRR8TcY")
-//        if (authUtils.getTokenExp().toLong() > tstamp) {
+//        appSettings.saveLoggedIn(true)
+//        appSettings.saveToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOiJhYTcxOWZjOC0yMDEzLTRhZmEtODdkZi1kYmY4NTQ2NzEyYjciLCJyb2xlIjoiQURNSU4iLCJuYmYiOjE2MzQzMTc5MjcsImV4cCI6MTYzNDQwNDMyNywiaWF0IjoxNjM0MzE3OTI3fQ.9MXTMbe5KPVNpLebPnxeKs1dLq0IkW0BFg7nIRR8TcY")
+        if (authUtils.getTokenExp().toLong() > tstamp) {
             if (appSettings.getLoggedIn()) {
                 if (appSettings.getIsAdmin()) {
                     val intent = Intent(this@LoginFragment.context, MainActivityAdmin::class.java)
-                    //intent.putExtra("WID", obj.WID)
                     startActivity(intent)
                     activity?.finish()
                 } else {
                     val intent = Intent(this@LoginFragment.context, MainActivityShop::class.java)
-                    //intent.putExtra("WID", obj.WID)
                     startActivity(intent)
                     activity?.finish()
                 }
 
             }
-//        }
-
-
-
+        }
 
         binding.btnLogin.setOnClickListener {
             binding.progressBar.visibility = View.VISIBLE
@@ -108,13 +103,11 @@ class LoginFragment : Fragment() {
                                     this@LoginFragment.context,
                                     MainActivityAdmin::class.java
                                 )
-                                //intent.putExtra("WID", obj.WID)
                                 startActivity(intent)
                                 activity?.finish()
                             } else {
                                 val intent =
                                     Intent(this@LoginFragment.context, MainActivityShop::class.java)
-                                //intent.putExtra("WID", obj.WID)
                                 startActivity(intent)
                                 activity?.finish()
                             }

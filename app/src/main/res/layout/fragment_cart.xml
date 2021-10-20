@@ -41,7 +41,7 @@
                     <RelativeLayout
                         android:id="@+id/mainContainer" android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -68,9 +68,9 @@
                                 app:layout_constraintBottom_toBottomOf="parent" android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="10dp"
-                                app:cardCornerRadius="5dp"
+                                app:cardCornerRadius="2dp"
                                 style="@style/Widget.MaterialComponents.CardView"
-                                app:cardElevation="2dp">
+                                app:cardElevation="3dp">
                                 <RelativeLayout android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
 
@@ -83,7 +83,7 @@
                                         android:gravity="fill"
                                         android:minWidth="60dp"
                                         android:padding="5dp"
-                                        android:text="Quantity:"
+                                        android:text="@string/quantity"
                                         android:textColor="?colorPrimary"
                                         android:textSize="14sp" />
                                     <TextView
@@ -109,7 +109,7 @@
                                         android:gravity="fill"
                                         android:minWidth="60dp"
                                         android:padding="5dp"
-                                        android:text="Amount:"
+                                        android:text="@string/amount"
                                         android:textColor="?colorPrimary"
                                         android:textSize="14sp" />
                                     <TextView
@@ -129,6 +129,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_alignParentEnd="true"
+                                        android:layout_marginEnd="5dp"
                                         android:layout_centerVertical="true"
                                         android:layout_toEndOf="@id/list_amnt"
                                         android:enabled="false"
