@@ -1,5 +1,6 @@
 package com.tayyab.mobileapp.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
@@ -10,8 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import com.tayyab.mobileapp.databinding.ProductCrudListItemBinding
 import com.tayyab.mobileapp.interfaces.OnProductItemClickListener
+import com.tayyab.mobileapp.models.Category
 import com.tayyab.mobileapp.models.Product
 import com.tayyab.mobileapp.utils.Config
+import java.util.stream.Collectors
 import kotlin.streams.toList
 
 
@@ -39,6 +42,10 @@ class ProductsCrudAdapter(rowLayout: Int, recyclerView: RecyclerView) :
     }
 
     fun insertData(items: List<Product>) {
+        val common: List<Product> = items
+            .stream()
+            .filter(data!!::contains)
+            .collect(Collectors.toList())
         if (items.size > data!!.size) {
             data!!.clear()
              original!!.clear()
@@ -50,6 +57,18 @@ class ProductsCrudAdapter(rowLayout: Int, recyclerView: RecyclerView) :
             this.original!!.addAll(items)
             // this.original!!.addAll(items)
 
+            int = data!!.size
+        }else if (data!!.size != common.size) {
+            Log.e("TEST:", "else block")
+            data!!.clear()
+            original!!.clear()
+            // int positionStart = getItemCount();
+            // int itemCount = items.size();
+            this.data!!.addAll(items)
+            notifyDataSetChanged()
+//            recyclerView!!.post { notifyItemRangeChanged(common.size, data!!.size) }
+            this.original!!.addAll(items)
+            // this.original!!.addAll(items)
             int = data!!.size
         }
     }

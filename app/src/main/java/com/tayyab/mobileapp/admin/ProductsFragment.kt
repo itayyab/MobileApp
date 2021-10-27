@@ -92,6 +92,7 @@ class ProductsFragment : Fragment() {
                 val objx = object : OnProductItemClickListener{
                     override fun onItemClick(obj: Product) {
                         activityViewModel.getDialogs(true,obj)
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
                     }
                 }
                 binding.productclicklistner=objx

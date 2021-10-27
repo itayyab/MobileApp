@@ -242,14 +242,24 @@
                         android:textColor="@color/white" />
 
                 </LinearLayout>
-
                 <TextView
-                    android:id="@+id/list_titlex"
+                    android:id="@+id/label_desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/rel2"
                     android:gravity="fill"
-                    android:padding="5dp"
+                    android:padding="10dp"
+                    android:text="@string/description"
+                    android:textColor="?colorPrimaryDark"
+                    android:textSize="15sp"
+                    android:visibility="visible" />
+                <TextView
+                    android:id="@+id/list_titlex"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/label_desc"
+                    android:gravity="fill"
+                    android:padding="10dp"
                     android:text="@{product.pr_desc}"
                     android:textColor="?colorPrimaryDark"
                     android:textSize="18sp"

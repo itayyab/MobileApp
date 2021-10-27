@@ -46,9 +46,9 @@ class CategoriesAdapter(rowLayout: Int, recyclerView: RecyclerView) :
             .stream()
             .filter(data!!::contains)
             .collect(Collectors.toList())
-        val gson = Gson()
-        val arrayData = gson.toJson(common)
-        Log.e("TEST:", arrayData)
+//        val gson = Gson()
+//        val arrayData = gson.toJson(common)
+//        Log.e("TEST:", arrayData)
         if (items.size > data!!.size) {
             data!!.clear()
             original!!.clear()
