@@ -116,7 +116,7 @@ class LoginFragment : Fragment() {
                         override fun onFailed(error: VolleyError) {
                             Toast.makeText(
                                 context,
-                                "Login failed. Error:" + error.networkResponse.statusCode.toString(),
+                                "Login failed. Error:$error",
                                 Toast.LENGTH_LONG
                             )
                                 .show()
